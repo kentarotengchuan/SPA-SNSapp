@@ -1,16 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 
 <head>
-    <title>Vanilla JS + Laravel API</title>
+    <meta charset="UTF-8">
+    <title>LINE風SNSチャット</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .chat-box {
+            height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+
+        .message-me {
+            text-align: right;
+            color: blue;
+        }
+
+        .message-other {
+            text-align: left;
+            color: black;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Hello from Vanilla JS</h1>
-    <button id="load">Fetch from Laravel</button>
-    <p id="msg"></p>
 
-    <script src="app.js"></script>
+    <!-- 🔐 ログイン画面 -->
+    <section id="login-view">
+        <h2>ログイン</h2>
+        <input type="email" id="login-email" placeholder="Email"><br>
+        <input type="password" id="login-password" placeholder="Password"><br>
+        <button onclick="handleLogin()">ログイン</button>
+    </section>
+
+    <!-- 👥 フレンド一覧画面 -->
+    <section id="friends-view" class="hidden">
+        <h2>フレンド一覧</h2>
+        <div id="friend-list"></div>
+        <button onclick="handleLogout()">ログアウト</button>
+    </section>
+
+    <!-- 💬 チャット画面 -->
+    <section id="chat-view" class="hidden">
+        <button onclick="backToFriends()">← 戻る</button>
+        <h2 id="chat-with">チャット相手</h2>
+        <div class="chat-box" id="chat-box"></div>
+
+        <input type="text" id="message-input" placeholder="メッセージを入力...">
+        <button onclick="sendChatMessage()">送信</button>
+    </section>
+
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
