@@ -31,4 +31,4 @@
 
     'allowed_headers' => ['*'],
 
-    'supports_credentials' => true,
+    'supports_credentials' => true,# line
