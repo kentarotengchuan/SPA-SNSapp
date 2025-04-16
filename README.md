@@ -1,7 +1,6 @@
-# laravel-vanilla
+# line風疑似SNSアプリ
 
 # 構築手順
-
 
 ## 1
 「cp ./backend/.env.example ./backend/.env」で環境をコピー。
