@@ -1,95 +1,57 @@
-// 初期処理：ページ読み込み時にログイン済みかチェック
+import './event.js';
+import { getCurrentChatId, getCurrentChatName } from './state/messageState.js';
+import { handleLogout } from './services/userService.js';
+import { renderFriends } from './views/renderFriends.js';
+import { showView } from './views/showView.js';
+import { openChat } from './services/messageService.js';
+import { renderAuthorAndFriends } from './views/renderAuthorAndFriends.js';
+import { fetchUser } from './api/users.js';
+import { renderBlockedUsers } from './views/renderBlockedUsers.js';
+import { renderInvites } from './views/renderInvites.js';
+
+
+let initialized = false;
 window.addEventListener('DOMContentLoaded', async () => {
-    if (token) {
-        try {
-            const me = await apiGet('/user');
-            localStorage.setItem('user_id', me.id);
-            await loadFriends();
-            showView('friends-view');
-        } catch (e) {
-            console.warn('トークンはあるが無効かも？', e);
-            handleLogout(); // トークン破棄してログイン画面へ
+    if (initialized) return;
+    initialized = true;
+    
+    const lastView = localStorage.getItem('lastView');
+    const chatId = getCurrentChatId();
+    const chatName = getCurrentChatName();
+
+    if (location.hash === '#/email-verified') {
+        await showView('login-view');
+    }
+    if (lastView) {
+        switch (lastView) {
+            case 'friends-view':
+                await renderFriends();
+                await showView('friends-view');
+                break;
+            case 'chat-view':
+                await openChat(chatId, chatName);
+                break;
+            case 'auth-view':
+                await renderAuthorAndFriends();
+                await showView('auth-view');
+                break;
+            case 'profile-view':
+                let auth = await fetchUser();
+                document.getElementById('name-input').value = auth.user.name;
+                await showView('profile-view');
+                break;
+            case 'block-view':
+                await renderBlockedUsers();
+                await showView('block-view');
+                break;
+            case 'control-view':
+                await renderInvites();
+                await showView('control-view');
+                break;
+            default:
+                await showView(lastView || 'login-view');
+                break;
         }
-    } else {
-        showView('login-view');
     }
 });
 
-function showView(viewId) {
-    document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
-    document.getElementById(viewId).classList.remove('hidden');
-}
-
-async function handleLogin() {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-
-    const res = await apiPost('/login', { email, password });
-
-    if (res.token) {
-        setToken(res.token);
-        const me = await apiGet('/user');
-        localStorage.setItem('user_id', me.id);
-        await loadFriends();
-        showView('friends-view');
-    } else {
-        alert('ログイン失敗');
-    }
-}
-
-async function loadFriends() {
-    const friends = await apiGet('/friends');
-    const container = document.getElementById('friend-list');
-    container.innerHTML = '';
-    friends.forEach(f => {
-        const btn = document.createElement('button');
-        btn.textContent = f.name;
-        btn.onclick = () => openChat(f.id, f.name);
-        container.appendChild(btn);
-    });
-}
-
-let currentFriendId = null;
-
-async function openChat(friendId, name) {
-    currentFriendId = friendId;
-    document.getElementById('chat-with').textContent = `相手: ${name}`;
-    showView('chat-view');
-
-    const messages = await fetchMessages(friendId);
-    renderMessages(messages);
-}
-
-function renderMessages(messages) {
-    const box = document.getElementById('chat-box');
-    box.innerHTML = '';
-    messages.forEach(msg => {
-        const div = document.createElement('div');
-        div.className = msg.sender_id === parseInt(localStorage.getItem('user_id'))
-            ? 'message-me' : 'message-other';
-        div.textContent = msg.message;
-        box.appendChild(div);
-    });
-}
-
-async function sendChatMessage() {
-    const input = document.getElementById('message-input');
-    const text = input.value;
-    if (!text) return;
-
-    await sendMessage(currentFriendId, text);
-    input.value = '';
-    const messages = await fetchMessages(currentFriendId);
-    renderMessages(messages);
-}
-
-async function handleLogout() {
-    await apiPost('/logout');
-    localStorage.clear();
-    //token = null;
-    showView('login-view');
-}
-
-function backToFriends() {
-    showView('friends-view');
-}

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class AuthController extends Controller
+class UserController extends Controller
 {
     public function register(Request $request)
     {
@@ -46,5 +46,38 @@ class AuthController extends Controller
     public function me()
     {
         return response()->json(auth()->user());
+    }
+
+    public function search($userId){
+        $user = User::findOrFail($userId);
+        return response()->json($user);
+    }
+
+    public function searchByName(Request $request){
+        $name = $request->input('name');
+        $users = User::where('id','!=',auth()->user()->id)->where('name', 'like', '%' . $name . '%')->get();
+        return response()->json($users);
+    }
+
+    public function update(Request $request) {
+        $request->validate([
+            'name' => 'required',
+            'image' => 'max:4096|image',
+        ]);
+
+        $user = auth('web')->user();
+
+        if ($request->has('name')) {
+        $user->name = $request->input('name');
+        }
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('public/user_images');
+            $user->img_path = basename($path);
+        }
+
+        $user->save();
+
+        return response()->json(['message' => 'updated']);
     }
 }
