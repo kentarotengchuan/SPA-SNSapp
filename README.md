@@ -17,18 +17,26 @@
 ## 7
 ブラウザで「localhost:3000」にアクセスすることでアプリを表示。
 
-#　使用技術
+# 使用技術
 PHP 8.2.28
+
 Laravel Framework 10.48.29
+
 JavaScript
+
 MySQL　8.0.32
+
 Mailpit (v1.21.7)
+
 Vite 6.3.3
 
 # ポートごとの機能
 localhost:3000 ・・・フロントエンド
+
 localhost:8000 ・・・バックエンド(Laravel)
+
 localhost:8080 ・・・phpMyAdmin（DB情報にアクセス）
+
 localhost:8025 ・・・MailPit（ローカル環境では認証メールはここに表示される）
 
 # アプリ作成の目的
