@@ -7,7 +7,7 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/var/www
-      #- /var/www/vendor # ← vendorだけマウントから外す
+      - /var/www/vendor # ← vendorだけマウントから外す
     depends_on:
       - db
 
