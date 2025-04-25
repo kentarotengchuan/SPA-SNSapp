@@ -19,7 +19,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     const chatId = getCurrentChatId();
     const chatName = getCurrentChatName();
 
-    if (location.hash === '#/email-verified') {
+    const hash = location.hash;
+
+    if (hash === '#/email-verified') {
         await showView('login-view');
     }
     if (lastView) {

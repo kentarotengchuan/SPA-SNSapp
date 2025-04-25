@@ -18,13 +18,15 @@ function getCookie(name) {
 
 export function getHeaders(isJson = true) {
     const xsrf = getCookie('XSRF-TOKEN');
-    const session = getCookie('laravel_session');
     const headers = {};
-    if (xsrf) headers['X-XSRF-TOKEN'] = decodeURIComponent(xsrf);
+
+    if (xsrf) {
+        headers['X-XSRF-TOKEN'] = decodeURIComponent(xsrf);
+    }
+
     if (isJson) {
         headers['Content-Type'] = 'application/json';
         headers['Accept'] = 'application/json';
-        headers['Cookie'] = `XSRF-TOKEN=${xsrf}; laravel_session=${session}`;
     }
 
     headers['X-Requested-With'] = 'XMLHttpRequest';
@@ -32,7 +34,6 @@ export function getHeaders(isJson = true) {
 }
 
 export async function apiGet(endpoint) {
-    console.log('API GET:', endpoint);
     await getCSRF();
     const res = await fetch(API_BASE + endpoint, {
         method: 'GET',

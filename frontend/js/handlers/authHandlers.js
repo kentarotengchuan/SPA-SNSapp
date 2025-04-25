@@ -16,6 +16,8 @@ export const authHandlers = {
         '.login-link': async (el, e) => {
             e.preventDefault();
             localStorage.removeItem('lastView');
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
             document.getElementById('register-name').value = '';
             document.getElementById('register-email').value = '';
             document.getElementById('register-password').value = '';
@@ -24,6 +26,9 @@ export const authHandlers = {
         '.register-link': async (el, e) => {
             e.preventDefault();
             localStorage.removeItem('lastView');
+            document.getElementById('register-name').value = '';
+            document.getElementById('register-email').value = '';
+            document.getElementById('register-password').value = '';
             document.getElementById('login-email').value = '';
             document.getElementById('login-password').value = '';
             await showView('register-view');

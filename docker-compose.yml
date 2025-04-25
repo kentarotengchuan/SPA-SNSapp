@@ -18,7 +18,7 @@ services:
     ports:
       - "3000:80"
     volumes:
-      - ./frontend:/usr/share/nginx/html:ro
+      - ./frontend/public/dist:/usr/share/nginx/html:ro
 
   db:
     image: mysql:8.0.32

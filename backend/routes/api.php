@@ -22,6 +22,10 @@ use App\Http\Controllers\MessageController;
 Route::post('/login', [AuthController::class, 'login']); 
 Route::post('/register',[AuthController::class, 'register']);
 
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/logout',[AuthController::class,'logout']);
+});
+
 // ✅ 認証済みユーザー用ルート（要: auth:sanctum）
 Route::middleware(['auth:sanctum','verified'])->group(function () {
     Route::get('/user', [AuthController::class, 'me']);
@@ -32,5 +36,4 @@ Route::middleware(['auth:sanctum','verified'])->group(function () {
     Route::get('/messages/{friend_id}', [MessageController::class, 'index']);
     Route::post('/messages/{friend_id}', [MessageController::class, 'send']);
     Route::post('/profile',[UserController::class, 'update']);
-    Route::post('/logout',[AuthController::class,'logout']);
 });
