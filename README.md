@@ -1,16 +1,28 @@
-# line風疑似SNSアプリ
+# SPA仕様のSNSアプリ
 
 # 構築手順
 
 ## 1
-「cp ./backend/.env.example ./backend/.env」で環境をコピー。
-## 2   
-プロジェクトディレクトリ内で「docker-compose up -d --build」を実行し、フロントエンドとバックエンドを構築。
+プロジェクトディレクトリ内で「cp ./backend/.env.example ./backend/.env」で環境をコピー。
+## 2
+「cd frontend」でフロントエンドディレクトリに移動し、「npm install」を実行してViteをインストール。
 ## 3
-バックエンドのシェルに入る。「docker-compose exec backend bash」
+「npm run build」を実行して、フロントエンドのファイル構成を最適化する。
 ## 4
-マイグレーションとシーディングを実行。「php artisan migrate:fresh --seed」
+プロジェクトディレクトリ内で「docker-compose up -d --build」を実行し、フロントエンドとバックエンドを構築。
 ## 5
-シンボリックリンクを作成。「php artisan storage:link」
+バックエンドのシェルに入る。「docker-compose exec backend bash」
+## 6
+マイグレーションとシーディングを実行。「php artisan migrate:fresh --seed」
 
-# line-vite
+# アプリ作成の目的
+    ・フロントエンドとバックエンドを完全に切り分けたSPA仕様のアプリを作成して、CORに対する理解を深めるため。
+
+    ・Vanilla.jsを採用し、非同期処理やイベント移譲、モジュール構成といったJavaScriptの基礎的な知識を確認するため。
+
+    ・Viteを採用して、バンドラーの利用方法を確認するため。
+
+# 今後追加予定の実装
+    ・TypeScriptを採用し、フロントエンドを総じて書き換えることで、型の安全性の保障による安定定・自身のTypeScriptの知識を確認したい。
+
+    ・現在CSSを一つのファイルに一元化しているが、これをコンポーネント化することによって、今後のプロジェクトの複雑化を見越した実装をしたい。CSSコンポーネント化はViteの採用による恩恵を受けられる項目なので積極的に採用したい。

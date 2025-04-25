@@ -7,7 +7,7 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/var/www
-      - /var/www/vendor # ← vendorだけマウントから外す
+      - /var/www/vendor # vendorだけマウントから外す
     depends_on:
       - db
 
@@ -47,5 +47,5 @@ services:
     image: axllent/mailpit
     container_name: mailpit
     ports:
-      - "8025:8025"  # ← Web UI
-      - "1025:1025"  # ← SMTP ポート
+      - "8025:8025"
+      - "1025:1025"  

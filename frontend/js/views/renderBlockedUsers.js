@@ -8,7 +8,6 @@ export async function renderBlockedUsers() {
     container.innerHTML = '';
 
     const blockedUsers = await fetchBlockedUsers();
-    console.log(blockedUsers);
     Array.from(blockedUsers).forEach(f => {
         const div = document.createElement('div');
         div.className = 'userForm';
